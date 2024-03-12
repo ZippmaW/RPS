@@ -1,22 +1,53 @@
 "use strict";
 
+const display = document.createElement("div");
+const pScore = document.createElement("div");
+const cScore = document.createElement("div");
+const result = document.createElement("div");
 const rockBtn = document.createElement("button");
 const paperBtn = document.createElement("button");
 const scissorsBtn = document.createElement("button");
+let playerChoice = "";
+let playerScore = 0;
+let computerScore = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
+  display.append(pScore, cScore, result);
+  document.body.appendChild(display);
   document.body.append(rockBtn, paperBtn, scissorsBtn);
 });
 
 rockBtn.setAttribute("style", "width: 80px; height: 30px; margin-right: 10px;");
 rockBtn.textContent = "Rock";
+rockBtn.id = "rock";
 paperBtn.setAttribute(
   "style",
   "width: 80px; height: 30px; margin-right: 10px;"
 );
+paperBtn.id = "paper";
 paperBtn.textContent = "Paper";
 scissorsBtn.setAttribute("style", "width: 80px; height: 30px;");
 scissorsBtn.textContent = "Scissors";
+scissorsBtn.id = "scissors";
+display.textContent = "Score";
+pScore.textContent = "Player: " + playerScore;
+cScore.textContent = "Computer: " + computerScore;
+result.textContent = "Click a button to begin the game";
+
+rockBtn.addEventListener("click", (event) =>
+  playRound(getComputerChoice(), getPlayerChoice(event))
+);
+paperBtn.addEventListener("click", (event) =>
+  playRound(getComputerChoice(), getPlayerChoice(event))
+);
+scissorsBtn.addEventListener("click", (event) =>
+  playRound(getComputerChoice(), getPlayerChoice(event))
+);
+
+function getPlayerChoice(event) {
+  console.log(event.target.id);
+  return event.target.id;
+}
 
 function getComputerChoice() {
   switch (Math.floor(Math.random() * 3 + 1)) {
@@ -32,10 +63,6 @@ function getComputerChoice() {
   }
 }
 
-function getPlayerChoice() {
-  let selection = "";
-}
-
 function playRound(computer, player) {
   if (
     (computer === "rock" && player === "scissors") ||
@@ -43,13 +70,22 @@ function playRound(computer, player) {
     (computer === "scissors" && player === "paper")
   ) {
     console.log("Computer wins");
-    return "NPC";
+    computerScore += 1;
+    cScore.textContent = "Computer: " + computerScore;
+    result.textContent = "Computer wins this round!";
+    if (computerScore >= 5) {
+      alert("Computer wins");
+    }
   } else if (computer === player) {
-    console.log("Draw");
-    return "DRAW";
+    result.textContent = "It's a draw!";
   } else {
     console.log("Player wins!");
-    return "PLAYER";
+    playerScore += 1;
+    pScore.textContent = "Player: " + playerScore;
+    result.textContent = "Player wins this round!";
+    if (playerScore >= 5) {
+      alert("Player wins!");
+    }
   }
 }
 
